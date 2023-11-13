@@ -8,14 +8,16 @@ const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
+const ENV = process.env;
+
 const db = knex({
     client: 'pg',
     connection: {
-      host : '127.0.0.1',
-      port : 3004,
-      user : 'selestrel',
-      password : '123qwe123',
-      database : 'smart-brain'
+      host : ENV.DATABASE_URL,
+      port : ENV.DATABASE_PORT,
+      user : ENV.DATABASE_USER,
+      password : ENV.DATABASE_USER_PASSWORD,
+      database : ENV.DATABASE_NAME
     }
   });
 
@@ -30,6 +32,7 @@ app.get('/profile/:id', profile.handleProfileGet(db));
 app.put('/image', image.handleImage(db));
 app.post('/imageurl', image.handleApiCall());
 
-app.listen(3003, () => {
-    console.log('app is running on port 3003');
+const PORT = ENV.PORT;
+app.listen(PORT, () => {
+    console.log(`app is running on port ${PORT}`);
 });
